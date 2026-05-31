@@ -1,0 +1,1037 @@
+{
+  "searchProducts": {
+    "id": "search-products",
+    "name": "Search Products",
+    "description": "Searches for products.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "maxPrice": {
+          "type": "number"
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": [
+            "price",
+            "rating",
+            "popularity"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "rating": {
+                "type": "number"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "totalResults": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "compareProducts": {
+    "id": "compare-products",
+    "name": "Compare Products",
+    "description": "Compares multiple products.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "productIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "comparison": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string"
+              },
+              "productValues": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "recommendation": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "compareFeatures": {
+    "id": "compare-features",
+    "name": "Compare Features",
+    "description": "Compares features across different products.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "productIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "comparison": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string"
+              },
+              "values": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "analyzePricing": {
+    "id": "analyze-pricing",
+    "name": "Analyze Pricing",
+    "description": "Analyzes pricing strategies.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "productIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "currency": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "type": "string"
+        },
+        "pricing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "valueScore": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "searchFlights": {
+    "id": "search-flights",
+    "name": "Search Flights",
+    "description": "Searches for available flights.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "passengers": {
+          "type": "integer"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "flights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "airline": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "departure": {
+                "type": "string"
+              },
+              "arrival": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "comparePrices": {
+    "id": "compare-prices",
+    "name": "Compare Prices",
+    "description": "Compares flight prices across multiple providers.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "destination": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "comparisons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "currency": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "analyzeClause": {
+    "id": "analyze-clause",
+    "name": "Analyze Clause",
+    "description": "Analyzes a specific clause in a contract.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "clause": {
+          "type": "string"
+        },
+        "contractText": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "type": "string"
+        },
+        "riskLevel": {
+          "type": "string"
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "detectRisk": {
+    "id": "detect-risk",
+    "name": "Detect Risk",
+    "description": "Identifies high-risk clauses.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "contractText": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "clause": {
+                "type": "string"
+              },
+              "risk": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "overallRisk": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "summarizeTerms": {
+    "id": "summarize-terms",
+    "name": "Summarize Terms",
+    "description": "Generates a plain-language summary.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "contractText": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "keyTerms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "term": {
+                "type": "string"
+              },
+              "definition": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "createInvoice": {
+    "id": "create-invoice",
+    "name": "Create Invoice",
+    "description": "Generates a professional invoice.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "clientName": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "number"
+              },
+              "unitPrice": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "taxRate": {
+          "type": "number"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "invoiceNumber": {
+          "type": "string"
+        },
+        "total": {
+          "type": "number"
+        },
+        "tax": {
+          "type": "number"
+        },
+        "subtotal": {
+          "type": "number"
+        },
+        "pdfUrl": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "sendInvoice": {
+    "id": "send-invoice",
+    "name": "Send Invoice",
+    "description": "Sends an invoice via email.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        },
+        "recipientEmail": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "sent": {
+          "type": "boolean"
+        },
+        "sentAt": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "trackPayment": {
+    "id": "track-payment",
+    "name": "Track Payment",
+    "description": "Tracks payment status for an invoice.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "paidAt": {
+          "type": "string"
+        },
+        "paymentMethod": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "searchPatents": {
+    "id": "search-patents",
+    "name": "Search Patents",
+    "description": "Searches patent databases.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "dateRange": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            }
+          }
+        },
+        "classifications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "patents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "patentNumber": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "inventor": {
+                "type": "string"
+              },
+              "filingDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "totalResults": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "analyzePatent": {
+    "id": "analyze-patent",
+    "name": "Analyze Patent",
+    "description": "Analyzes a patent document.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "patentId": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "type": "string"
+        },
+        "keyClaims": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priorArt": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommendations": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "checkInfringement": {
+    "id": "check-infringement",
+    "name": "Check Infringement",
+    "description": "Checks if a product infringes on patents.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "productDescription": {
+          "type": "string"
+        },
+        "patentIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "risk": {
+          "type": "string"
+        },
+        "infringingClaims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "claim": {
+                "type": "string"
+              },
+              "likelihood": {
+                "type": "string"
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "overallAssessment": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "reviewClause": {
+    "id": "review-clause",
+    "name": "Review Clause",
+    "description": "Reviews a contract clause.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "clause": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "review": {
+          "type": "string"
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "readability": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "checkCompliance": {
+    "id": "check-compliance",
+    "name": "Check Compliance",
+    "description": "Checks a contract for regulatory compliance.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "contractText": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "compliant": {
+          "type": "boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "regulation": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string"
+              },
+              "details": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "generateSummary": {
+    "id": "generate-summary",
+    "name": "Generate Summary",
+    "description": "Generates a concise summary of a contract.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "contractText": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "keyPoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "searchCases": {
+    "id": "search-cases",
+    "name": "Search Cases",
+    "description": "Searches legal case databases.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "dateRange": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "citation": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "court": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "totalResults": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "analyzePrecedent": {
+    "id": "analyze-precedent",
+    "name": "Analyze Precedent",
+    "description": "Analyzes legal precedent.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "caseId": {
+          "type": "string"
+        },
+        "legalQuestion": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "type": "string"
+        },
+        "relevantPrecedents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "case": {
+                "type": "string"
+              },
+              "relevance": {
+                "type": "string"
+              },
+              "reasoning": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "generateBrief": {
+    "id": "generate-brief",
+    "name": "Generate Brief",
+    "description": "Generates a legal brief.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "caseIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "argument": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "brief": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "analyzeTrends": {
+    "id": "analyze-trends",
+    "name": "Analyze Trends",
+    "description": "Analyzes market trends.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string"
+        },
+        "timeframe": {
+          "type": "string"
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "trends": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "direction": {
+                "type": "string"
+              },
+              "magnitude": {
+                "type": "number"
+              },
+              "insights": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "competitiveAnalysis": {
+    "id": "competitive-analysis",
+    "name": "Competitive Analysis",
+    "description": "Analyzes competitive landscape.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string"
+        },
+        "competitors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "type": "string"
+        },
+        "positioning": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "competitor": {
+                "type": "string"
+              },
+              "strengths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weaknesses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "generateReport": {
+    "id": "generate-report",
+    "name": "Generate Report",
+    "description": "Generates a comprehensive market analysis report.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {}
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "pdf",
+            "html",
+            "markdown"
+          ]
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "report": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "pages": {
+          "type": "integer"
+        },
+        "generatedAt": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

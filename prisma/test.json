@@ -1,0 +1,44 @@
+{
+  "s1": {
+    "id": "s1",
+    "name": "S1",
+    "desc": "d",
+    "input": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "r": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "s2": {
+    "id": "s2",
+    "name": "S2",
+    "desc": "d",
+    "input": {
+      "type": "object",
+      "properties": {
+        "q": {
+          "type": "string"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "r": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

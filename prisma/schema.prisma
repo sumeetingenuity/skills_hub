@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SkillCategory {
+  ANALYTICS
+  COMMUNICATION
+  DATA
+  DEVELOPER_TOOLS
+  FINANCE
+  LEGAL
+  MARKETING
+  PRODUCTIVITY
+  RESEARCH
+  SALES
+  SECURITY
+  AI_ML
+  OTHER
+}
+
+enum ImportSource {
+  GITHUB
+  AWESOME_SKILLS
+  MCP
+  PROMPT_LIBRARY
+  OPENAPI
+  LOCAL_UPLOAD
+  AMTP_MARKDOWN
+}
+
+enum BadgeType {
+  VERIFIED_PUBLISHER
+  TRUSTED_PROVIDER
+  EXECUTIONS_10K
+  EXECUTIONS_100K
+  COMMUNITY_FAVORITE
+  TOP_CONTRIBUTOR
+}
+
+model User {
+  id            String   @id @default(cuid())
+  clerkId       String   @unique
+  email         String   @unique
+  name          String?
+  avatarUrl     String?
+  bio           String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  skills        Skill[]
+  reviews       Review[]
+  badges        UserBadge[]
+  organizations OrganizationMember[]
+  apiKeys       ApiKey[]
+  executions    Execution[]
+  analytics     Analytics[]
+  workflows     Workflow[]
+}
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logoUrl     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  members OrganizationMember[]
+  skills  Skill[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  role           String       @default("MEMBER")
+  organizationId String
+  userId         String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([organizationId, userId])
+}
+
+model Skill {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  name          String
+  description   String
+  category      SkillCategory @default(OTHER)
+  source        ImportSource?
+  sourceUrl     String?
+  iconUrl       String?
+  tags          String[]
+  published     Boolean       @default(false)
+  version       Int           @default(1)
+  authorId      String
+  author        User          @relation(fields: [authorId], references: [id])
+  organizationId String?
+  organization  Organization? @relation(fields: [organizationId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  versions    SkillVersion[]
+  actions     Action[]
+  permissions Permission[]
+  policies    Policy[]
+  executions  Execution[]
+  reviews     Review[]
+  trustScore  TrustScore?
+  workflows   WorkflowSkill[]
+  analytics   Analytics[]
+
+  @@index([category])
+  @@index([published])
+  @@index([slug])
+}
+
+model SkillVersion {
+  id        String   @id @default(cuid())
+  version   Int
+  changelog String?
+  manifest  Json
+  skillId   String
+  skill     Skill    @relation(fields: [skillId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([skillId, version])
+}
+
+model Action {
+  id          String   @id @default(cuid())
+  actionId    String
+  name        String
+  description String?
+  endpoint    String?
+  method      String   @default("POST")
+  parameters  Json?
+  riskLevel   String   @default("low")
+  // Execution pipeline: ordered steps for multi-call actions
+  steps       Json?    // Array of ActionStep objects
+  // Endpoint configuration
+  headers     Json?    // Custom headers for the endpoint
+  authType    String?  // "bearer", "api-key", "oauth2", "basic", "none"
+  authConfig  Json?    // Auth configuration (token field, key name, etc.)
+  // Request/Response transforms
+  requestTransform  Json?  // JSONPath/template mapping for request body
+  responseTransform Json?  // JSONPath/template mapping for response extraction
+  // Retry & timeout configuration
+  timeout     Int?     @default(5000)  // milliseconds
+  retries     Int?     @default(0)
+  retryDelay  Int?     @default(1000)  // milliseconds between retries
+  // Execution flow
+  executionMode String? @default("single") // "single", "sequential", "parallel", "conditional"
+  skillId     String
+  skill       Skill    @relation(fields: [skillId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([skillId])
+  @@index([actionId])
+}
+
+model Permission {
+  id               String   @id @default(cuid())
+  roles            String[]
+  scopes           String[]
+  authRequirements String[]
+  approvalRequired Boolean  @default(false)
+  skillId          String
+  skill            Skill    @relation(fields: [skillId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([skillId])
+}
+
+model Policy {
+  id                String   @id @default(cuid())
+  rateLimit         Int?
+  rateLimitWindow   Int?
+  restrictions      Json?
+  executionConditions Json?
+  skillId           String
+  skill             Skill    @relation(fields: [skillId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([skillId])
+}
+
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  slug        String   @unique
+  published   Boolean  @default(false)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  skills WorkflowSkill[]
+}
+
+model WorkflowSkill {
+  id         String   @id @default(cuid())
+  order      Int
+  config     Json?
+  workflowId String
+  workflow   Workflow @relation(fields: [workflowId], references: [id])
+  skillId    String
+  skill      Skill    @relation(fields: [skillId], references: [id])
+
+  @@unique([workflowId, skillId])
+  @@index([workflowId])
+}
+
+model Execution {
+  id         String   @id @default(cuid())
+  status     String   @default("PENDING")
+  input      Json?
+  output     Json?
+  logs       String?
+  latency    Int?
+  error      String?
+  skillId    String
+  skill      Skill    @relation(fields: [skillId], references: [id])
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  agentId    String?
+  agent      Agent?   @relation(fields: [agentId], references: [id])
+  createdAt  DateTime @default(now())
+  completedAt DateTime?
+
+  @@index([skillId])
+  @@index([status])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([skillId, createdAt])
+}
+
+model Agent {
+  id        String   @id @default(cuid())
+  name      String
+  type      String?
+  apiKeyId  String?
+  apiKey    ApiKey?  @relation(fields: [apiKeyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  executions Execution[]
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  name      String
+  key       String   @unique  // SHA-256 hash of the actual key
+  keyHint   String?           // Last 8 chars of the raw key for display (e.g., "...a1b2c3d4")
+  lastUsed  DateTime?
+  expiresAt DateTime?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  agents Agent[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  skillId   String
+  skill     Skill    @relation(fields: [skillId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, skillId])
+  @@index([skillId])
+}
+
+model Badge {
+  id        String    @id @default(cuid())
+  type      BadgeType
+  name      String
+  description String?
+  iconUrl   String?
+  createdAt DateTime  @default(now())
+
+  users UserBadge[]
+}
+
+model UserBadge {
+  id      String @id @default(cuid())
+  userId  String
+  badgeId String
+  user    User   @relation(fields: [userId], references: [id])
+  badge   Badge  @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+}
+
+model TrustScore {
+  id          String   @id @default(cuid())
+  score       Float    @default(0)
+  successRate Float?
+  uptime      Float?
+  verified    Boolean  @default(false)
+  totalExecutions Int  @default(0)
+  totalReviews    Int  @default(0)
+  skillId     String   @unique
+  skill       Skill    @relation(fields: [skillId], references: [id])
+  updatedAt   DateTime @updatedAt
+}
+
+model ImportJob {
+  id          String       @id @default(cuid())
+  source      ImportSource
+  sourceUrl   String
+  status      String       @default("PENDING")
+  log         String?
+  skillId     String?
+  userId      String?
+  createdAt   DateTime     @default(now())
+  completedAt DateTime?
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  executions Int     @default(0)
+  latency   Float?
+  successRate Float?
+  activeAgents Int  @default(0)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  skillId   String?
+  skill     Skill?   @relation(fields: [skillId], references: [id])
+}
